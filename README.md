@@ -6,14 +6,13 @@ The xNETFrameWork module is a DSC Resource to install the .NET Framework
 
 To manually install the module, download the source code and unzip the contents of the 'xNETFrameWork' directory to the '$env:ProgramFiles\WindowsPowerShell\Modules folder'.
 
-The **xBits** module contians the following resources:
+The **xNETFrameWork** module contians the following resources:
 
-- **xBitsTransfer**: Copies a file using Bits.
+- **xDotNet46**: Installs .NET 4.6.1.
 
 ## Resources
 
-###XbitsTransfer 
-Most of this information can be found on the Start-BitsTransfer Site ( https://technet.microsoft.com/en-us/library/dd819420.aspx
+###DotNet46
    )
    
 - **`[String]` Version** (_Key_):  .Net Version to install. 
