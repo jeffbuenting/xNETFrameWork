@@ -25,6 +25,9 @@ Class DotNet46 {
     [PSCredential]$Credential
 
     [DSCProperty()]
+    [Int]$SecondsToDelay = 300
+
+    [DSCProperty()]
     [Ensure]$Ensure = 'Present'
 
     [DOTNet46]Get() {
@@ -95,7 +98,7 @@ Class DotNet46 {
 
         if ( $This.Ensure -eq [Ensure]::Present ) 
         {
-            Write-Verbose "And it needs to be."
+            Write-Verbose "So it needs to be installed / Updated."
             Return $NetInstalled
         }
         Else {
@@ -107,13 +110,21 @@ Class DotNet46 {
     # ----- Installs or Uninstalls .Net
     [Void]Set() 
     { 
+        Write-Verbose "SourcePath : $($This.SourcePath)"
+        Write-verbose "Log : $($This.LogFile)"
+
+        # ----- Without this delay the installation of .NET is failing.
+        Write-Verbose "Pausing $($This.SecondsToDelay)"
+        For ( $I = 1; $I -le 100; $I++ ) {
+            Write-Progress -Activity "Pausing prior to .NET install" -Status "$I% Complete" -PercentComplete $I
+            Start-Sleep -Seconds ($This.SecondsToDelay / 100)
+        }      
+
         if ( $This.Ensure -eq 'Present' ) 
         {
             Try 
             {
                 Write-Verbose "Installing .Net" 
-                Write-Verbose "SourcePath : $($This.SourcePath)"
-                Write-verbose "Log : $($This.LogFile)"
                 Start-Process -FilePath $This.SourcePath -ArgumentList "/q /norestart /Log $($This.LogFile)" -Wait -Credential $This.Credential -ErrorAction Stop  
             }
             Catch
@@ -133,7 +144,7 @@ Class DotNet46 {
             {
                 $EXceptionMessage = $_.Exception.Message
                 $ExceptionType = $_.exception.GetType().fullname
-                Throw "xNetFramework : Error Installing .Net`n`n     $ExceptionMessage`n`n     Exception : $ExceptionType"
+                Throw "xNetFramework : Error Uninstalling .Net`n`n     $ExceptionMessage`n`n     Exception : $ExceptionType"
             } 
         }
     }
