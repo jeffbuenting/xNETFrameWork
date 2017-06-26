@@ -23,10 +23,7 @@ Class DotNet46 {
 
     [DSCProperty(Mandatory)]
     [PSCredential]$Credential
-
-    [DSCProperty()]
-    [Int]$SecondsToDelay = 300
-
+    
     [DSCProperty()]
     [Ensure]$Ensure = 'Present'
 
@@ -112,14 +109,7 @@ Class DotNet46 {
     { 
         Write-Verbose "SourcePath : $($This.SourcePath)"
         Write-verbose "Log : $($This.LogFile)"
-
-        # ----- Without this delay the installation of .NET is failing.
-        Write-Verbose "Pausing $($This.SecondsToDelay)"
-        For ( $I = 1; $I -le 100; $I++ ) {
-            Write-Progress -Activity "Pausing prior to .NET install" -Status "$I% Complete" -PercentComplete $I
-            Start-Sleep -Seconds ($This.SecondsToDelay / 100)
-        }      
-
+  
         if ( $This.Ensure -eq 'Present' ) 
         {
             Try 
@@ -131,7 +121,7 @@ Class DotNet46 {
             {
                 $EXceptionMessage = $_.Exception.Message
                 $ExceptionType = $_.exception.GetType().fullname
-                Throw "xNetFramework : Error Installing .Net`n`n     $ExceptionMessage`n`n     Exception : $ExceptionType"
+                Throw "xNetFramework : Error Installing .Net.  Possibly need to run with PSDSCCredential. `n`n     $ExceptionMessage`n`n     Exception : $ExceptionType"
             } 
         }
         else {
@@ -144,7 +134,7 @@ Class DotNet46 {
             {
                 $EXceptionMessage = $_.Exception.Message
                 $ExceptionType = $_.exception.GetType().fullname
-                Throw "xNetFramework : Error Uninstalling .Net`n`n     $ExceptionMessage`n`n     Exception : $ExceptionType"
+                Throw "xNetFramework : Error Uninstalling .Net.  Possibly need to run with PSDSCCredential.`n`n     $ExceptionMessage`n`n     Exception : $ExceptionType"
             } 
         }
     }
