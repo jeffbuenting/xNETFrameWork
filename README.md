@@ -2,7 +2,7 @@
 
 The xNETFrameWork module is a DSC Resource to install the .NET Framework
 
-## Installation
+### Installation
 
 To manually install the module, download the source code and unzip the contents of the 'xNETFrameWork' directory to the '$env:ProgramFiles\WindowsPowerShell\Modules folder'.
 
@@ -22,4 +22,12 @@ The **xNETFrameWork** module contians the following resources:
 
 ## Versions
 
-## Examples
+### Examples
+
+## NON DSC .Net Scripts
+
+  - **Get-DotNetHotfixes**
+    - Lists .Net Hotfixes that are installed on a computer.
+	
+	- **`[String[]]`ComputerName : Name of the computer to get the information from.
+	
